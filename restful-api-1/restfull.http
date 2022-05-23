@@ -22,3 +22,51 @@ name="Elmar"&sname="Alibeyli"
 ###
 //URL Parametresi 
 GET {{BASE_URL}}12?sortbyName=name
+
+
+
+
+/////////////////////////////////////// USER API //////////////////////////////
+###
+//user request
+@USER_API = http://localhost:3500/api
+
+//Butun Userler
+GET {{USER_API}}/users/
+
+
+//user id sine gore isdek
+###
+GET {{USER_API}}/users/628b78351d90fc6c088287f2
+
+//yeni user yaratmaq => Post request
+###
+POST  {{USER_API}}/users/
+Content-Type: application/json
+
+{
+    "name": "Eldar",
+    "userName": "eldar",
+    "email": "eldar.amanov10@gmail.com",
+    "password": "eldar123"
+}
+
+
+###
+PATCH   {{USER_API}}/users/628c04d7baab76a8efc4188d
+Content-Type: application/json
+
+{
+    "name": "Eldar",
+    "userName": "ar",
+    "email": "elr.amanov10@gmail.com",
+    "password": "eldar123"
+}
+
+
+###
+DELETE    {{USER_API}}/users/628c04b8baab76a8efc4188b
+
+
+
+

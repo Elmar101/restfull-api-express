@@ -1,5 +1,6 @@
 const express = require('express');
 require("./database/databaseConnecting");
+const userRouter = require("./router/userRouter");
 
 const app = express();
 //Midlware 
@@ -21,8 +22,15 @@ app.post("/",(request, response)=>{
 //Url Parametresi (params and query)
 app.get("/:id",(request, response)=>{
     console.log(request.query);
-    response.json(request.params)
+    //response.json(request.params);
+    response.json(request.query);
 });
+
+/*/users request start/*/
+app.use("/api/users", userRouter);
+
+/*/users request end /*/
+
 
 app.listen("3500" ,()=>{
     console.log("SERVER start to 3500 port");
