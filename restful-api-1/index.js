@@ -1,7 +1,7 @@
 const express = require('express');
 require("./database/databaseConnecting");
 const userRouter = require("./router/userRouter");
-
+const userErrorMiddleware = require("./middleware/errors-middleware/userErrorsMiddleware")
 const app = express();
 //Midlware 
 app.use(express.json());
@@ -30,7 +30,11 @@ app.get("/:id",(request, response)=>{
 app.use("/api/users", userRouter);
 
 /*/users request end /*/
-
+/* app.use((err , req , res , next)=>{
+    console.log("indexde---" + err);
+    next(err);
+}); */ 
+app.use(userErrorMiddleware);
 
 app.listen("3500" ,()=>{
     console.log("SERVER start to 3500 port");

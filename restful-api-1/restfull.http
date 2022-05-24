@@ -58,14 +58,14 @@ Content-Type: application/json
 
 {
     "name": "Eldar",
-    "userName": "ar",
+    "userName": "edik",
     "email": "elr.amanov10@gmail.com",
     "password": "eldar123"
 }
 
 
 ###
-DELETE    {{USER_API}}/users/628c04b8baab76a8efc4188b
+DELETE    {{USER_API}}/users/628b78351d90fc6c088287f4
 
 
 

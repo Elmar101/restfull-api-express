@@ -1,6 +1,7 @@
 const { Router } =  require("express");
 const UserModel = require("../models/userModels");
 
+
 const router = Router();
 //butun userler
 router.get("/", async (req , res)=>{
@@ -42,7 +43,7 @@ router.patch("/:user_id", async (req , res)=>{
         if(result){
            return res.json(result);
         }else {
-           return console.log(user_ID + " idli user tapilmadi");
+           return res.status(404).json(user_ID + " idli user tapilmadi");
         }
     }catch(err){
         console.log("guncelerken xeta oldu : "+err);
@@ -51,19 +52,22 @@ router.patch("/:user_id", async (req , res)=>{
 });
 
 //silinecek user => delete isdeyi
-router.delete("/:user_id", async (req , res)=>{
+router.delete("/:user_id", async (req , res , next)=>{
     const user_ID = req.params.user_id;
     try{
         const result = await UserModel.findByIdAndDelete({_id: user_ID});
         if(result){
-            res.json({
+            return res.json({
                 message: "Silinen User" + result
             })
         }else {
+            const error = new Error("istifadeci tapilmadi");
+            error.errorStatus = "404"
+            throw error
             console.log(req.params.user_id + " li User Tapilmadi");
         }
     }catch(err){
-        console.log("Useri silerken bir xeta oldu " + err);
+       next(err);
     }
 });
 
