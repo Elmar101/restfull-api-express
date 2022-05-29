@@ -1,7 +1,8 @@
 const express = require('express');
 require("./database/databaseConnecting");
 const userRouter = require("./router/userRouter");
-const userErrorMiddleware = require("./middleware/errors-middleware/userErrorsMiddleware")
+const userErrorMiddleware = require("./middleware/errors-middleware/userErrorsMiddleware");
+const { required } = require('joi');
 const app = express();
 //Midlware 
 app.use(express.json());
@@ -35,7 +36,18 @@ app.use("/api/users", userRouter);
     next(err);
 }); */ 
 app.use(userErrorMiddleware);
-
+const bcrypt = require('bcrypt');
+const test = async ()=>{
+    const password = "elmar12345eldar"
+    const hashPassword = await bcrypt.hash(password , 10);
+    console.log("Password: " , password);
+    console.log("hash password: ", hashPassword);
+    //Compare etmek 
+    const compare1 = await bcrypt.compare("elik12345", hashPassword)
+    const compare2 = await bcrypt.compare("elmar12345eldar", hashPassword)
+    console.log(" compare1: ", compare1 , " \n compare2" , compare2);
+}
+test();
 app.listen("3500" ,()=>{
     console.log("SERVER start to 3500 port");
 })

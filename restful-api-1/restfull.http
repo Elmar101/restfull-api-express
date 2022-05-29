@@ -45,10 +45,10 @@ POST  {{USER_API}}/users/
 Content-Type: application/json
 
 {
-    "name": "Eldar",
-    "userName": "eldar",
-    "email": "eldar.amanov10@gmail.com",
-    "password": "eldar123"
+    "name": "El",
+    "userName": "elmar12",
+    "email": "elmar.amanov1120@gmail.com",
+    "password": "eldar12312"
 }
 
 
@@ -57,15 +57,14 @@ PATCH   {{USER_API}}/users/628c04d7baab76a8efc4188d
 Content-Type: application/json
 
 {
-    "name": "Eldar",
-    "userName": "edik",
-    "email": "elr.amanov10@gmail.com",
-    "password": "eldar123"
+    "email": "elsvs",
+    "password": "elda.amanov1120@gmail.com"
 }
 
 
 ###
-DELETE    {{USER_API}}/users/628b78351d90fc6c088287f4
+DELETE    {{USER_API}}/users/628b78351d90fc6c088287f2
+Content-Type: application/json
 
 
 

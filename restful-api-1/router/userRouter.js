@@ -1,6 +1,6 @@
 const { Router } =  require("express");
 const UserModel = require("../models/userModels");
-
+const createError = require('http-errors');
 
 const router = Router();
 //butun userler
@@ -24,30 +24,52 @@ router.get("/:user_id", async (req , res)=>{
 });
 
 //User Yaratmaq => Post request
-router.post("/", async (req , res)=>{
+router.post("/", async (req , res , next)=>{
     try {
         const addNewUser = new UserModel(req.body);
-        const result = await addNewUser.save();
-        res.json(result);
-    }catch(err){console.log("user yaradilmadi " + err)}
+        const {error , value} = UserModel().joiValidation(req.body);
+        if(error){
+            next(error);
+            console.log(error);
+        }else{
+            const result = await addNewUser.save();
+            res.json(result);
+        }
+    }catch(err){
+        next(err);
+        console.log(err);
+    }
 });
 
 //guncelenme => patch isdeyi
-router.patch("/:user_id", async (req , res)=>{
+router.patch("/:user_id", async (req , res , next)=>{
     const user_ID = req.params.user_id;
-    try{
-        const result = await UserModel.findByIdAndUpdate({
-            _id: user_ID
-        }, req.body ,{new: true,runValidators: true});
-        
-        if(result){
-           return res.json(result);
-        }else {
-           return res.status(404).json(user_ID + " idli user tapilmadi");
-        }
-    }catch(err){
-        console.log("guncelerken xeta oldu : "+err);
+    delete req.body.password;
+    delete req.body.createdAt;
+    delete req.body.updateAt
+    console.log("re body", req.body);
+    const {error ,result} = UserModel.joiValidationForUpdate(req.body);
+    if(error){
+        console.log(error);
+       // next(error)
+       next(createError(400 ,error))
     }
+    else{
+        try{
+            const result = await UserModel.findByIdAndUpdate({
+                _id: user_ID
+            }, req.body ,{new: true,runValidators: true});
+            
+            if(result){
+               return res.json(result);
+            }else {
+               return res.status(404).json(user_ID + " idli user tapilmadi");
+            }
+        }catch(err){
+            next(err);
+        }
+    }
+   
     
 });
 
@@ -61,13 +83,13 @@ router.delete("/:user_id", async (req , res , next)=>{
                 message: "Silinen User" + result
             })
         }else {
-            const error = new Error("istifadeci tapilmadi");
-            error.errorStatus = "404"
-            throw error
-            console.log(req.params.user_id + " li User Tapilmadi");
+            /* const error = new Error("istifadeci tapilmadi");
+            error.errorStatus = "404" */
+            throw createError(404 , "istifadeci tapilmadi");
+            //console.log(req.params.user_id + " li User Tapilmadi");
         }
     }catch(err){
-       next(err);
+       next( createError(400 , err) );
     }
 });
 
